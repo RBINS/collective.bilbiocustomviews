@@ -36,7 +36,7 @@ def _render_details_cachekey(method, self, brain, firstfull=False, invert=False)
         path = brain.getPath()
     except AttributeError,e:
         path = '/'.join(brain.getPhysicalPath())
-    return (brain.getPath(), firstfull, invert, fifteen_minutes())
+    return (path, firstfull, invert, five_minutes())
 
 
 def _render_contents(method, self, *args, **kwargs):

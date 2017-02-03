@@ -1,0 +1,23 @@
+<configure
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:faceted="http://namespaces.zope.org/faceted"
+  i18n_domain="eea">
+
+  <faceted:widget factory=".widget.Widget" />
+
+  <browser:resource
+    name="collective.bibliocustomviews.resultsrange.view.js"
+    file="./view.js"
+   />
+
+  <browser:resource
+    name="collective.bibliocustomviews.resultsrange.edit.js"
+    file="./edit.js"
+   />
+
+  <browser:resource
+    name="collective.bibliocustomviews.resultsrange.view.css"
+    file="./view.css"
+   />
+
+</configure>

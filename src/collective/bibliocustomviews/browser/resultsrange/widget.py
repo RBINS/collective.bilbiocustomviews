@@ -67,7 +67,7 @@ class Widget(CountableWidget):
     index = ViewPageTemplateFile('widget.pt')
     edit_schema = CountableWidget.edit_schema.copy() + EditSchema
     edit_schema['title'].default = 'Results range'
-    edit_schema['sortcountable'].widget.visible = -1
+    del edit_schema['sortcountable']
 
     @property
     def default(self):

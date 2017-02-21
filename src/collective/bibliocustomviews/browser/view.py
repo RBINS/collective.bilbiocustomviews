@@ -267,10 +267,6 @@ class SummaryView(BibliocvUtils):
                         e['homepage'],
                         author,
                     )
-                if author:
-                    if "\\x" in repr(author[-2:]):
-                        initial = ue[1][0:2]
-                        author = author[:-2] + initial + author[-1:]
                 e['author'] = author
                 authors_links.append(author)
                 authors.append(e)

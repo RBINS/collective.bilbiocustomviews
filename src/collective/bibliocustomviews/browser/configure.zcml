@@ -7,7 +7,7 @@
     i18n_domain="collective.bibliocustomviews">
 
   <include package="eea.facetednavigation" file="meta.zcml"/>
-  <!-- ' collective.bibliocustomviews' Zope 3 browser layer -->
+  <include package=".resultsrange" />
 
   <include package="plone.app.z3cform" />
   <include package="plone.app.contentmenu" />
@@ -17,23 +17,6 @@
     />
   <interface  name="collective.bibliocustomviews" interface="collective.bibliocustomviews.interfaces.ILayer" />
 
-  <!-- Viewlets registration -->
-
-  <!-- Zope 3 browser views -->
-  <!--
-    <browser:page
-        layer="collective.bibliocustomviews.interfaces.ILayer"
-        for="collective.bibliocustomviews.interface.mycontent"
-        name="MyView"
-        class=".view.MyView"
-        allowed_interface=".view.IMyView"
-        permission="zope2.View"
-      />
-  -->
-
-  <!-- Zope 3 browser resources -->
-
-  <!-- Resource directory -->
   <browser:resourceDirectory
       name="collective.bibliocustomviews"
       directory="resources"
@@ -148,14 +131,5 @@
       permission="zope2.View">
     </faceted:view>
 
-<!--
-  <five:implements
-      class="plone.app.contenttypes.content.Folder"
-      interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
-  <five:implements
-      class="plone.app.contenttypes.content.Collection"
-      interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
--->
   <include package="plone.resource" file="meta.zcml"/>
-<!-- vim:set ft=xml: -->
 </configure>

@@ -54,6 +54,7 @@ setup(
         'bibliograph.parsing',
         'bibliograph.rendering',
         'Products.CMFBibliographyAT',
+        'ecreall.helpers.upgrade',
         # -*- Extra requirements: -*-
     ],
     extras_require = {

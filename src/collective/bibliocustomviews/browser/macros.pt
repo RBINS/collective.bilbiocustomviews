@@ -156,13 +156,18 @@
             bibliodt_datatables[id] = $('table.biblio-datatable').DataTable();
           }
           else {
+               var paging = true;
+               $('.faceted-resultsrange-widget').each(function() {
+                 // disable paging if resultsrange widget is present
+                 paging = false;
+               });
                var bibliodt_opts = {
                 jQueryUI: true,
                 dom: 'lpfrti<"clear">T',
                 autoWidth: false,
                 ordering: true,
                 oTableTools: {"sSwfPath": "++resource++jquery.datatables/extras/TableTools/media/swf/copy_csv_xls_pdf.swf"},
-                paging: true,
+                paging: paging,
                 lengthMenu: thislengthmenu,
                 iDisplayLength: 100,
                 pagingType: "full_numbers",
@@ -172,6 +177,9 @@
                 bibliodt_opts["orderData"] = [ [0, "asc"]];
               }
               bibliodt_datatables[id] = jelem.DataTable(bibliodt_opts);
+            if (!paging) {
+              $('#biblio-datatable_info').remove();
+            }
           }
           bibliodt_tables[id] = jelem;
           $("input[type=text]", tfoot).each(function(i, inp){

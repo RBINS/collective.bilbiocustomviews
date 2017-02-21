@@ -27,23 +27,19 @@ def five_minutes():
     return time() // (5 * 60)
 
 
-def fifteen_minutes():
-    return time() // (15 * 60)
-
-
 def _render_details_cachekey(method, self, brain, firstfull=False, invert=False):
     try:
         path = brain.getPath()
     except AttributeError,e:
         path = '/'.join(brain.getPhysicalPath())
-    return (path, firstfull, invert, five_minutes())
+    return path, firstfull, invert, five_minutes()
 
 
 def _render_contents(method, self, *args, **kwargs):
-    hs = fifteen_minutes()
+    hs = five_minutes()
     ids = [a for a in self.context.objectIds()]
     ids.sort()
-    return (self.context.getPhysicalPath(), ids, hs)
+    return self.context.getPhysicalPath(), ids, hs
 
 
 def comparecustom(a):
@@ -193,15 +189,9 @@ class ISummaryView(interface.Interface):
 class SummaryView(BibliocvUtils):
     """MY view doc"""
     interface.implements(ISummaryView)
-    #template = ViewPageTemplateFile('template.pt')
-    #def __call__(self, **params):
-    #    """."""
-    #    params = {}
-    #    return self.template(**params)
 
     @ram.cache(_render_contents)
     def getFolderContents(self, contentFilter=None, batch=False,b_size=100,full_objects=False):
-        #logging.getLogger('foo').error('cont hitted')
         context = self.context
         mtool = context.portal_membership
         cur_path = '/'.join(context.getPhysicalPath())
@@ -246,7 +236,6 @@ class SummaryView(BibliocvUtils):
 
     @ram.cache(_render_details_cachekey)
     def infosFor(self, it, firstfull=False, invert=False):
-        #logging.getLogger('foo').error('info hitted')
         authors_links = []
         catalog = getToolByName(it, 'portal_catalog')
         if (
@@ -256,10 +245,8 @@ class SummaryView(BibliocvUtils):
             it = catalog.search(dict(
                 path={'depth': 0, 'query': '/'.join(it.getPhysicalPath())}
             ))[0]
-        path =  it.getPath()
+        path = it.getPath()
         authors = []
-        #if 'brain' in it.__class__.__name__:
-        #    item = it.getObject()
         if it.bAuthorsList:
             for ue in it.bAuthorsList:
                 e = {

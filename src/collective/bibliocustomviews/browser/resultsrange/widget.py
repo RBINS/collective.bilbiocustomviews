@@ -94,15 +94,16 @@ class Widget(CountableWidget):
         else:
             start = form.get(self.data.getId(), 0) or 0
 
-        if start != ALL_VALUE:
-            try:
-                start = int(start)
-            except ValueError:
-                return query
+        if start == ALL_VALUE or (self.request.form.get('excelexport.policy', '') == 'eea.facetednavigation'):
+            return query
 
-            query['b_size'] = int(self.data.get('step', 500))
-            query['b_start'] = start
+        try:
+            start = int(start)
+        except ValueError:
+            return query
 
+        query['b_size'] = int(self.data.get('step', 500))
+        query['b_start'] = start
         return query
 
     def _get_step(self):

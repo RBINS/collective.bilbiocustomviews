@@ -109,6 +109,14 @@
         </tr>
       </tfoot>
       </table>
+      <div class="excelexport-download-link"
+           tal:condition="view/have_excelexport">
+          <a tal:attributes="href context/@@eea_excel_export_url"
+             title="Excel export" i18n:attributes="title">
+           <img src="xls.png" />
+           <span i18n:translate="">Excel export</span>
+          </a>
+      </div>
       <script language="JavaScript">
       if(typeof(bibliodt_tables) == "undefined") {
         bibliodt_asInitVals = new Array();

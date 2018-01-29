@@ -1,27 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 __docformat__ = 'restructuredtext en'
 
-import logging
+from time import time
 
-from zope import component, interface
-from zope.component import getAdapter, getMultiAdapter, queryMultiAdapter, getUtility
 from Products.ATContentTypes.interface import IATTopic
-
-from Products.Five import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFCore.utils import getToolByName
-from plone.registry.interfaces import IRegistry
-from Products.ATContentTypes.interfaces.interfaces import IATContentType
-from Acquisition import aq_parent
-from Acquisition import aq_parent
-from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFBibliographyAT.browser.export import BibliographyExportView
 from Products.CMFBibliographyAT.interface import IBibliographicItem
-
-from plone.memoize import ram
-from time import time
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.PloneBatch import Batch
+from Products.Five import BrowserView
 from collective.bibliocustomviews.utils import magicstring
+from plone.memoize import ram
+from zope import interface
+from zope.component import getMultiAdapter
+
+try:
+    from collective.excelexport.interfaces import ICollectiveExcelexportLayer
+except ImportError:
+    ICollectiveExcelexportLayer = None
+
 
 def five_minutes():
     return time() // (5 * 60)
@@ -81,6 +80,9 @@ class IBibliocvUtils(interface.Interface):
 
     def author_repeat_sep(self, repeat, key):
         """."""
+
+    def have_excelexport(self):
+        """@return bool"""
 
 
 def format_firstname(text, firstfull=False):
@@ -170,6 +172,12 @@ class BibliocvUtils(BrowserView):
                 results.append(tuple(result))
             if results:
                 return results
+
+    def have_excelexport(self):
+        if ICollectiveExcelexportLayer:
+            return ICollectiveExcelexportLayer.providedBy(self.request)
+        else:
+            return False
 
 
 class ISummaryView(interface.Interface):

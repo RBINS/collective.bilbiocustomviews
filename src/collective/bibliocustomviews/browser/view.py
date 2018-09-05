@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 __docformat__ = 'restructuredtext en'
 
 from time import time
@@ -8,10 +7,12 @@ from time import time
 from Products.ATContentTypes.interface import IATTopic
 from Products.CMFBibliographyAT.browser.export import BibliographyExportView
 from Products.CMFBibliographyAT.interface import IBibliographicItem
+from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
 from Products.Five import BrowserView
 from collective.bibliocustomviews.utils import magicstring
+from plone import api
 from plone.memoize import ram
 from zope import interface
 from zope.component import getMultiAdapter
@@ -29,7 +30,7 @@ def five_minutes():
 def _render_details_cachekey(method, self, brain, firstfull=False, invert=False):
     try:
         path = brain.getPath()
-    except AttributeError,e:
+    except AttributeError, e:
         path = '/'.join(brain.getPhysicalPath())
     return path, firstfull, invert, five_minutes()
 
@@ -63,9 +64,9 @@ def comparecustom(a):
     return '%s___%s' % (first, magicstring(a.Title))
 
 
-
 class IBibliocvUtils(interface.Interface):
     """Marker interface"""
+
     def test(a, b, c):
         """."""
 
@@ -90,7 +91,7 @@ def format_firstname(text, firstfull=False):
     splits = text.split()
     for i, part in enumerate(splits):
         if part:
-            if i == 0 and firstfull:# and len(splits)>1:
+            if i == 0 and firstfull:  # and len(splits)>1:
                 p = part
             else:
                 p = "%s." % part[0].upper()
@@ -107,7 +108,7 @@ class BibliocvUtils(BrowserView):
     def inmiddle(self, repeat, key):
         """"""
         return (not repeat[key].start and
-            not repeat[key].end)
+                not repeat[key].end)
 
     def last(self, repeat, key):
         """"""
@@ -127,7 +128,7 @@ class BibliocvUtils(BrowserView):
         ret = False
         rp = repeat[key]
         if self.inmiddle(repeat, key):
-            if rp.number() == rp.length()-1:
+            if rp.number() == rp.length() - 1:
                 ret = True
         return ret
 
@@ -150,7 +151,7 @@ class BibliocvUtils(BrowserView):
 
     def format_authors(self):
         cat = getToolByName(self.context, 'portal_catalog')
-        it = cat.search({'path':{'depth':0, 'query':'/'.join(self.context.getPhysicalPath())}})[0]
+        it = cat.search({'path': {'depth': 0, 'query': '/'.join(self.context.getPhysicalPath())}})[0]
         sv = SummaryView(self.context, self.request)
         infos = sv.infosFor(it, firstfull=True, invert=True)
         return infos
@@ -185,8 +186,10 @@ class ISummaryView(interface.Interface):
 
     def getContentFilter(contentFilter):
         """."""
+
     def infosFor(it):
         """."""
+
     def getFolderContents(contentFilter=None,
                           batch=False,
                           b_size=100,
@@ -199,7 +202,7 @@ class SummaryView(BibliocvUtils):
     interface.implements(ISummaryView)
 
     @ram.cache(_render_contents)
-    def getFolderContents(self, contentFilter=None, batch=False,b_size=100,full_objects=False):
+    def getFolderContents(self, contentFilter=None, batch=False, b_size=100, full_objects=False):
         context = self.context
         mtool = context.portal_membership
         cur_path = '/'.join(context.getPhysicalPath())
@@ -226,7 +229,7 @@ class SummaryView(BibliocvUtils):
         contents = list(method(
             contentFilter,
             show_all=1,
-            show_inactive=show_inactive,))
+            show_inactive=show_inactive, ))
         if full_objects:
             contents = [b.getObject() for b in contents]
         contents.sort(key=comparecustom)
@@ -247,8 +250,8 @@ class SummaryView(BibliocvUtils):
         authors_links = []
         catalog = getToolByName(it, 'portal_catalog')
         if (
-            ('brain' not in it.__class__.__name__)
-            and IBibliographicItem.providedBy(it)
+                ('brain' not in it.__class__.__name__)
+                and IBibliographicItem.providedBy(it)
         ):
             it = catalog.search(dict(
                 path={'depth': 0, 'query': '/'.join(it.getPhysicalPath())}
@@ -258,13 +261,13 @@ class SummaryView(BibliocvUtils):
         if it.bAuthorsList:
             for ue in it.bAuthorsList:
                 e = {
-                    'lastname':   ue[0],
-                    'firstname':  ue[1],
+                    'lastname': ue[0],
+                    'firstname': ue[1],
                     'middlename': ue[2],
                     'formatedfname': format_firstname(
-                        (ue[1] + " " + ue[2]).strip(), firstfull = firstfull
+                        (ue[1] + " " + ue[2]).strip(), firstfull=firstfull
                     ),
-                    'homepage':   ue[3],
+                    'homepage': ue[3],
                 }
                 if invert:
                     author = ('%(formatedfname)s %(lastname)s' % e).strip()
@@ -291,7 +294,7 @@ class SummaryView(BibliocvUtils):
         else:
             try:
                 try:
-                    path = path[len(self.root_path)+1:]
+                    path = path[len(self.root_path) + 1:]
                 except Exception:
                     pass
             except Exception:
@@ -331,6 +334,7 @@ class IBibliocvMacros(ISummaryView):
 
 class BibliocvMacros(SummaryView):
     """."""
+
     def __init__(self, *args, **kwargs):
         SummaryView.__init__(self, *args, **kwargs)
 
@@ -349,6 +353,7 @@ class ISearch(ISummaryView):
 
 class Search(SummaryView):
     """."""
+
     def arrange(self, folderContents):
         """ Search using given criteria
         """
@@ -367,7 +372,7 @@ class Search(SummaryView):
         uids = self.request.form.get(
             'item', {}).get('selected', [])
         c = getToolByName(self.context, 'portal_catalog')
-        brains =  c.searchResults(UID=uids)
+        brains = c.searchResults(UID=uids)
         hv = BibliographyExportView(self.context, self.request)
 
         output_encoding = self.request.get('output_encoding', 'utf-8')
@@ -388,4 +393,17 @@ class Search(SummaryView):
         return export
 
 
-# vim:set et sts=4 ts=4 tw=80:
+class FolderWithImagePreviewItem(BrowserView):
+    folder_image_info = None
+
+    def __init__(self, context, request):
+        super(FolderWithImagePreviewItem, self).__init__(context, request)
+        if IFolderish.providedBy(context):
+            images = api.content.find(context=context, depth=1, portal_type='Image',
+                                      sort_order='getObjPositionInParent', sort_limit=1)
+            if len(images) > 0:
+                self.folder_image_info = {
+                    'alt': context.Title(),
+                    'title': context.Title(),
+                    'thumb_url': images[0].getURL() + '/image_thumb',
+                }

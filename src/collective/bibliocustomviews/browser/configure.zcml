@@ -7,21 +7,21 @@
     i18n_domain="collective.bibliocustomviews">
 
   <include package="eea.facetednavigation" file="meta.zcml"/>
-  <include package=".resultsrange" />
+  <include package=".resultsrange"/>
 
-  <include package="plone.app.z3cform" />
-  <include package="plone.app.contentmenu" />
+  <include package="plone.app.z3cform"/>
+  <include package="plone.app.contentmenu"/>
   <interface name="collective.bibliocustomviews-theme"
-      interface="collective.bibliocustomviews.interfaces.IThemeSpecific"
-      type="zope.publisher.interfaces.browser.IBrowserSkinType"
-    />
-  <interface  name="collective.bibliocustomviews" interface="collective.bibliocustomviews.interfaces.ILayer" />
+             interface="collective.bibliocustomviews.interfaces.IThemeSpecific"
+             type="zope.publisher.interfaces.browser.IBrowserSkinType"
+  />
+  <interface name="collective.bibliocustomviews" interface="collective.bibliocustomviews.interfaces.ILayer"/>
 
   <browser:resourceDirectory
       name="collective.bibliocustomviews"
       directory="resources"
       layer="collective.bibliocustomviews.interfaces.ILayer"
-    />
+  />
   <browser:page
       name="bibliocv_utils"
       for="*"
@@ -29,7 +29,7 @@
       permission="zope.Public"
       allowed_interface=".view.IBibliocvUtils"
       layer="collective.bibliocustomviews.interfaces.ILayer"
-    />
+  />
   <browser:page
       name="bibliocv_macros"
       for="*"
@@ -38,7 +38,7 @@
       permission="zope.Public"
       allowed_interface=".view.IBibliocvMacros"
       layer="collective.bibliocustomviews.interfaces.ILayer"
-    />
+  />
   <browser:page
       name="biblio_summary_view"
       menu="plone_displayviews"
@@ -49,7 +49,7 @@
       for="collective.bibliocustomviews.interfaces.ISummaryViewEnabled"
       allowed_interface=".view.ISummaryView"
       layer="collective.bibliocustomviews.interfaces.ILayer"
-    />
+  />
   <browser:page
       name="biblio_datatable_view"
       menu="plone_displayviews"
@@ -60,7 +60,7 @@
       permission="zope.Public"
       allowed_interface=".view.IDatatable"
       layer="collective.bibliocustomviews.interfaces.ILayer"
-    />
+  />
   <browser:viewlet
       name="biblio.css"
       for="collective.bibliocustomviews.interfaces.IResourcesEnabled"
@@ -69,67 +69,81 @@
       class=".viewlets.CSS"
       layer="collective.bibliocustomviews.interfaces.ILayer"
       permission="zope2.View"
-      />
-    <five:implements
+  />
+  <five:implements
       class="Products.CMFBibliographyAT.content.folder.BibliographyFolder"
       interface="collective.bibliocustomviews.interfaces.IDatatableViewEnabled"/>
-    <five:implements
+  <five:implements
       class="Products.CMFBibliographyAT.content.folder.BibliographyFolder"
       interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
-    <five:implements
+  <five:implements
       class="Products.CMFBibliographyAT.content.folder.BibliographyFolder"
       interface="collective.bibliocustomviews.interfaces.ISummaryViewEnabled"/>
-    <five:implements
+  <five:implements
       class="Products.ATContentTypes.content.folder.ATFolder"
       interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
-    <five:implements
+  <five:implements
       class="plone.app.collection.collection.Collection"
       interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
-    <five:implements
+  <five:implements
       class="Products.ATContentTypes.content.topic.ATTopic"
       interface="collective.bibliocustomviews.interfaces.ISearchViewEnabled"/>
-    <faceted:view
+  <faceted:view
       name="faceted-biblio-datatable-items"
       class=".view.Search"
       template="datatables-items.pt"
       title="Faceted bibliographic items preview in a table"
       permission="zope2.View">
-    </faceted:view>
-    <browser:page
+  </faceted:view>
+  <faceted:view
+      name="faceted-folder-with-image-preview-items"
+      template="folder-with-image-preview-items.pt"
+      title="Faceted folder items with an image preview"
+      permission="zope2.View">
+  </faceted:view>
+  <browser:page
+      name="faceted-folder-with-image-preview-item"
+      class=".view.FolderWithImagePreviewItem"
+      allowed_attributes="folder_image_info"
+      for="zope.interface.Interface"
+      template="folder-with-image-preview-item.pt"
+      permission="zope2.View"
+  />
+  <browser:page
       for="collective.bibliocustomviews.interfaces.ISearchViewEnabled"
       name="faceted-datatable-items-export"
       class=".view.Search"
       attribute="export"
       permission="zope2.View">
-    </browser:page>
-    <faceted:view
+  </browser:page>
+  <faceted:view
       name="faceted-datatable-items"
       class=".view.Search"
       template="datatables-simple-items.pt"
       title="Faceted items preview in a table"
       permission="zope2.View">
-    </faceted:view>
-    <faceted:view
+  </faceted:view>
+  <faceted:view
       name="faceted-datatable-date-items"
       class=".view.Search"
       template="datatables-simple-tags-items.pt"
       title="Faceted items preview in a table (only tags)"
       permission="zope2.View">
-    </faceted:view>
-    <faceted:view
+  </faceted:view>
+  <faceted:view
       name="faceted-datatable-tags-desc-items"
       class=".view.Search"
       template="datatables-simple-tags-desc-items.pt"
       title="Faceted items preview in a table (tags and description)"
       permission="zope2.View">
-    </faceted:view>
-    <faceted:view
+  </faceted:view>
+  <faceted:view
       name="faceted-datatable-tags-items"
       class=".view.Search"
       template="datatables-simple-date-items.pt"
       title="Faceted items preview in a table (only date)"
       permission="zope2.View">
-    </faceted:view>
+  </faceted:view>
 
   <include package="plone.resource" file="meta.zcml"/>
 </configure>

@@ -172,6 +172,7 @@
                var bibliodt_opts = {
                 jQueryUI: true,
                 dom: 'lpfrti<"clear">T',
+                aaSorting: [],
                 autoWidth: false,
                 ordering: true,
                 oTableTools: {"sSwfPath": "++resource++jquery.datatables/extras/TableTools/media/swf/copy_csv_xls_pdf.swf"},

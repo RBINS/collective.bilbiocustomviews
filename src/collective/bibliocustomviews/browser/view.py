@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from Products.ZCatalog.Lazy import LazyMap
+try:
+    from eea.facetednavigation.subtypes.interfaces import IFacetedWrapper
+except ImportError:
+    IFacetedWrapper = None
 
 __docformat__ = 'restructuredtext en'
 
@@ -360,7 +364,10 @@ class Search(SummaryView):
         """ Search using given criteria
         """
         ret = []
-        if isinstance(folderContents, Batch):
+        if IFacetedWrapper is not None and IFacetedWrapper.providedBy(self.context):
+            # sorting is managed by eea.facetednavigation
+            return list(folderContents)
+        elif isinstance(folderContents, Batch):
             # make a list of all batch content
             ret = list(folderContents)
         elif isinstance(folderContents, LazyMap):

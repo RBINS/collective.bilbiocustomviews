@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from Products.ZCatalog.Lazy import LazyMap
+
 __docformat__ = 'restructuredtext en'
 
 from time import time
@@ -361,11 +363,15 @@ class Search(SummaryView):
         if isinstance(folderContents, Batch):
             # make a list of all batch content
             ret = list(folderContents._sequence)
-            ret.sort(key=comparecustom)
-        elif folderContents:
+        elif isinstance(folderContents, LazyMap):
+            ret = list(folderContents)
+        elif not ret:
+            return []
+        else:
             raise Exception(
                 'Unexpected folderContents: %s' % type(
                     folderContents))
+        ret.sort(key=comparecustom)
         return ret
 
     def export(self, *args, **kwargs):

@@ -95,6 +95,7 @@ class Widget(CountableWidget):
             start = form.get(self.data.getId(), 0) or 0
 
         if start == ALL_VALUE or (self.request.form.get('excelexport.policy', '') == 'eea.facetednavigation'):
+            query['b_size'] = None
             return query
 
         try:

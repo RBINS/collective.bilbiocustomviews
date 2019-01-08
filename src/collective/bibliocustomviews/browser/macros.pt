@@ -41,7 +41,8 @@
             item_type_title item/Type;
             item_type_class python: 'contenttype-' + normalizeString(item_type);
             item_modified item/ModificationDate;
-            item_created item/CreationDate;"
+            item_created item/CreationDate;
+            item_icon item/getIcon;"
             >
             <tal:block tal:condition="python:'simple' in biblio_mode">
             <td>
@@ -289,6 +290,7 @@
         <input tal:condition="nothing" name="item.pselected:record:list" type="checkbox" class="bibliodt-select" tal:attributes="value item/UID|string:"/>
       </span>
       <metal:block  metal:define-macro="display-simple-reference">
+        <img width="16px" tal:condition="item_icon" tal:attributes="src string:${context/portal_url}/${item_icon}" />
         <span class="ref-title">.&nbsp;<a href="#" class="summary url" tal:content="item/Title"
           tal:attributes="href item/getURL|nothing;"> </a>
         </span>

@@ -166,7 +166,7 @@
           }
           else {
                var paging = true;
-               $('.faceted-resultsrange-widget').each(function() {
+               $('.faceted-resultsrange-widget').each(function() {
                  // disable paging if resultsrange widget is present
                  paging = false;
                });
